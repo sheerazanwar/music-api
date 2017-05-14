@@ -8,17 +8,13 @@ var ejs = require('ejs')
 app.set('view engine', 'ejs')
 
 var MAGIC_NUMBERS = {
-	jpg: 'ffd8ffe0',
-	jpg1: 'ffd8ffe1',
-	png: '89504e47',
-	gif: '47494638',
   mp3: '49443304',
   Mp3: '49443303'
 }
 
 function checkMagicNumbers(magic) {
   console.log(magic);
-	if (magic == MAGIC_NUMBERS.jpg ||magic == MAGIC_NUMBERS.Mp3 ||magic == MAGIC_NUMBERS.mp3 || magic == MAGIC_NUMBERS.jpg1 || magic == MAGIC_NUMBERS.png || magic == MAGIC_NUMBERS.gif) return true
+	if (magic == MAGIC_NUMBERS.Mp3 ||magic == MAGIC_NUMBERS.mp3) return true
 }
 
 app.get('/api/file', function(req, res) {
