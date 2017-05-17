@@ -7,15 +7,7 @@ var fs = require('fs')
 var ejs = require('ejs')
 app.set('view engine', 'ejs')
 
-var MAGIC_NUMBERS = {
-  mp3: '49443304',
-  Mp3: '49443303'
-}
 
-function checkMagicNumbers(magic) {
-  console.log(magic);
-	if (magic == MAGIC_NUMBERS.Mp3 ||magic == MAGIC_NUMBERS.mp3) return true
-}
 
 app.get('/api/file', function(req, res) {
 	res.render('index')
@@ -26,7 +18,7 @@ var storage = multer.diskStorage({
 		callback(null, './uploads')
 	},
 	filename: function(req, file, callback) {
-		callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+		callback(null, file.originalname)
 	}
 })
 
@@ -35,11 +27,15 @@ app.post('/api/file', function(req, res) {
 		storage: storage
 	}).single('userFile')
 	upload(req, res, function(err) {
-		var bitmap = fs.readFileSync('./uploads/' + req.file.filename).toString('hex', 0, 4)
-		if (!checkMagicNumbers(bitmap)) {
+		var extension = (req.file.filename).split('.');
+			console.log(extension[1]);
+		
+		if (extension[1]!='mp3') {
 			fs.unlinkSync('./uploads/' + req.file.filename)
+		
 			res.end('File is no valid')
 		}
+	//	console.log((req.file.filename).split('.'));
     console.log(req.file.path);
 		res.end('File is uploaded')
 	})
